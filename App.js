@@ -12,6 +12,9 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import Home from './components/Home';
 import Options from './components/Options';
+import Themes from './components/Themes';
+import CurrencyList from './components/CurrencyList';
+import { SCREENS } from './constants';
 
 const Stack = createStackNavigator();
 
@@ -20,14 +23,20 @@ function App() {
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen
-            name="Home"
+            name={SCREENS.HOME}
             component={Home}
-            options={{ title: '' }}
           />
           <Stack.Screen
-            name="Options"
+            name={SCREENS.OPTIONS}
             component={Options}
-            options={{ title: '' }}
+          />
+          <Stack.Screen
+            name={SCREENS.THEMES}
+            component={Themes}
+          />
+          <Stack.Screen
+            name={SCREENS.CURRENCIES}
+            component={CurrencyList}
           />
         </Stack.Navigator>
       </NavigationContainer>
