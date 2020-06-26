@@ -44,8 +44,8 @@ def flipper_post_install(installer)
   end
 end
 
-target 'EE' do
-  # Pods for EE
+target 'CurrencyConverter' do
+  # Pods for CurrencyConverter
   pod 'FBLazyVector', :path => "../node_modules/react-native/Libraries/FBLazyVector"
   pod 'FBReactNativeSpec', :path => "../node_modules/react-native/Libraries/FBReactNativeSpec"
   pod 'RCTRequired', :path => "../node_modules/react-native/Libraries/RCTRequired"
@@ -77,7 +77,7 @@ target 'EE' do
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
-  target 'EETests' do
+  target 'CurrencyConverterTests' do
     inherit! :complete
     # Pods for testing
   end
@@ -94,10 +94,10 @@ target 'EE' do
   end
 end
 
-target 'EE-tvOS' do
-  # Pods for EE-tvOS
+target 'CurrencyConverter-tvOS' do
+  # Pods for CurrencyConverter-tvOS
 
-  target 'EE-tvOSTests' do
+  target 'CurrencyConverter-tvOSTests' do
     inherit! :search_paths
     # Pods for testing
   end

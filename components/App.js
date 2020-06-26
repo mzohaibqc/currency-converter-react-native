@@ -51,7 +51,7 @@ function App() {
     
     setTimeout(() => {
       dispatch(setAuthState(authState || AUTH_STATES.LOGGED_OUT));
-      dispatch(setTheme(appTheme));
+      dispatch(setTheme(appTheme || THEMES_MAP.Blue));
       setLoading(false);
     }, 1000);
   });
