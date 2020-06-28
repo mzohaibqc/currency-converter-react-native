@@ -11,6 +11,12 @@ export const HeaderMenuIcon = styled(FontAwesomeIcon)`
   color: #fff;
 `;
 
+export const HeaderIconContainer = styled.TouchableHighlight`
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+`;
+
 export const AppLogoContainer = styled(Animated.View)`
   width: ${(props) => props.width || 250}px;
   height: ${(props) => props.width || 250}px;

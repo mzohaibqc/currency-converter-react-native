@@ -2,7 +2,6 @@ import allCurrencies from './currencies';
 import themes from './themes';
 
 export const AUTH_STATES = {
-  LOADING: 'oading',
   LOGGED_IN: 'true',
   LOGGED_OUT: 'false',
 }

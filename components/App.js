@@ -7,6 +7,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { Provider, useSelector, useDispatch } from 'react-redux';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
+import { PersistGate } from 'redux-persist/integration/react';
 
 import Login from 'components/Login';
 import Home from 'components/Home';
@@ -15,13 +16,13 @@ import Themes from 'components/Themes';
 import CurrencyList from 'components/CurrencyList';
 import Favorites from 'components/Favorites';
 import SplashScreen from 'components/SplashScreen';
-import { HeaderMenuIcon } from 'components/StyledComponents'
+import { HeaderIconContainer, HeaderMenuIcon } from 'components/StyledComponents';
 import { SCREENS, AUTH_STATES } from 'constants';
 import { getExchangeRates } from 'api';
 import { setExchangeRates } from 'actions/currency.actions';
-import { initializeAppState } from 'actions/app.actions';
-import store from 'store';
+import store, { persistor } from 'store';
 import selectors from 'selectors';
+import { TouchableHighlight } from 'react-native-gesture-handler';
 
 const Stack = createStackNavigator();
 
@@ -37,7 +38,6 @@ function App() {
 
   useEffect(() => {
     initializeExchangeRates();
-    dispatch(initializeAppState());
   }, []);
 
   const navigationTheme = {
@@ -45,7 +45,7 @@ function App() {
     colors: {
       ...DefaultTheme.colors,
       background: theme.color,
-      border: authState === AUTH_STATES.LOADING ? '#fff' : theme.color,
+      border: theme.color,
       primary: '#fff',
       text: '#fff',
     },
@@ -53,7 +53,7 @@ function App() {
 
   const headerOptions = {
     headerStyle: {
-      backgroundColor: authState === AUTH_STATES.LOADING ? '#fff' : theme.color,
+      backgroundColor: theme.color,
     },
   };
 
@@ -63,17 +63,11 @@ function App() {
     },
     headerTintColor: theme.color,
   };
+  console.log('auth state app.js', authState)
 
   return (
     <NavigationContainer theme={navigationTheme}>
       <Stack.Navigator>
-        {authState === AUTH_STATES.LOADING && (
-          <Stack.Screen
-            name={SCREENS.SPLASH}
-            component={SplashScreen}
-            options={{ ...headerOptions, title: '' }}
-          />
-        )}
         {authState === AUTH_STATES.LOGGED_IN && (
           <>
             <Stack.Screen
@@ -82,13 +76,13 @@ function App() {
               options={({ navigation }) => ({
                 ...headerOptions,
                 headerRight: () => (
-                  <HeaderMenuIcon
-                    icon={faBars}
-                    size={20}
+                  <HeaderIconContainer
+                    underlayColor="#fff"
                     onPress={() => {
                       navigation.navigate(SCREENS.OPTIONS);
-                    }}
-                  />
+                    }}>
+                    <HeaderMenuIcon icon={faBars} size={20} />
+                  </HeaderIconContainer>
                 ),
               })}
             />
@@ -130,9 +124,10 @@ function App() {
   );
 }
 
-
 export default () => (
   <Provider store={store}>
-    <App />
+    <PersistGate loading={<SplashScreen />} persistor={persistor}>
+      <App />
+    </PersistGate>
   </Provider>
 );

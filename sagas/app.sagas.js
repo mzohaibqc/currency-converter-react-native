@@ -18,7 +18,7 @@ import { sleep } from '../utils';
 function* watchLogin({ username, password }) {
   if (username === 'Admin' && password === 'Admin') {
     try {
-      yield call(AsyncStorage.setItem, 'authState', AUTH_STATES.LOGGED_IN);
+      // yield call(someLoginApi, username, password);
       yield call(sleep, 500)
       yield put(login.success());
     } catch (e) {
@@ -33,7 +33,8 @@ function* watchLogin({ username, password }) {
 }
 function* watchLogout() {
   try {
-    yield call(AsyncStorage.setItem, 'authState', AUTH_STATES.LOGGED_OUT);
+    // yield call(someLogoutApi);
+    yield call(sleep, 300)
     yield put(logout.success());
   } catch (e) {
     console.log('Error', e);
@@ -41,15 +42,7 @@ function* watchLogout() {
     yield put(logout.error());
   }
 }
-
-function* watchSetTheme({ value }) {
-  try {
-    yield call(AsyncStorage.setItem, 'appTheme', JSON.stringify(value));
-  } catch (e) {
-    console.log('Error', e);
-  }
-}
-
+// TODO: Need to remove this in redux-persist will perform well without issues
 function* watchInitializeAppState() {
   try {
     let appTheme = THEMES_MAP.Blue;
@@ -82,6 +75,5 @@ function* watchInitializeAppState() {
 export default [
   takeLatest(LOGIN.PENDING, watchLogin),
   takeLatest(LOGOUT.PENDING, watchLogout),
-  takeLatest(SET_THEME, watchSetTheme),
   takeLatest(INITIALIZE_APP_STATE, watchInitializeAppState),
 ];

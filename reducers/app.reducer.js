@@ -3,7 +3,7 @@ import { SET_THEME, SET_AUTH_STATE, LOGIN, LOGOUT, TOGGLE_FAVORITE } from 'actio
 
 const initialState = {
   theme: THEMES_MAP.Blue,
-  authState: AUTH_STATES.LOADING,
+  authState: AUTH_STATES.LOGGED_OUT,
   loginLoading: false,
   favorites: {},
 };
