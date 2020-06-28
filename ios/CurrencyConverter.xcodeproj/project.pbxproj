@@ -194,7 +194,6 @@
 				8DC050E1AA6B14E91055A597 /* Pods-CurrencyConverter-tvOSTests.debug.xcconfig */,
 				3B171AF6A8ED799FFD38E6AB /* Pods-CurrencyConverter-tvOSTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};

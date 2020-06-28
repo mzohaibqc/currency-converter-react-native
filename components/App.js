@@ -2,12 +2,14 @@
  * Navigation
  */
 import 'react-native-gesture-handler';
-import React, { useEffect, useCallback, useState } from 'react';
+import React, { useEffect, useCallback } from 'react';
+import { Platform } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { Provider, useSelector, useDispatch } from 'react-redux';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { PersistGate } from 'redux-persist/integration/react';
+import SplashScreenOs from 'react-native-splash-screen';
 
 import Login from 'components/Login';
 import Home from 'components/Home';
@@ -22,7 +24,6 @@ import { getExchangeRates } from 'api';
 import { setExchangeRates } from 'actions/currency.actions';
 import store, { persistor } from 'store';
 import selectors from 'selectors';
-import { TouchableHighlight } from 'react-native-gesture-handler';
 
 const Stack = createStackNavigator();
 
@@ -37,6 +38,7 @@ function App() {
   }, []);
 
   useEffect(() => {
+    SplashScreenOs.hide();
     initializeExchangeRates();
   }, []);
 
@@ -127,6 +129,7 @@ function App() {
 export default () => (
   <Provider store={store}>
     <PersistGate loading={<SplashScreen />} persistor={persistor}>
+      {/* {Platform.OS === 'ios' && <StatusBar barStyle="light-content" />} */}
       <App />
     </PersistGate>
   </Provider>
