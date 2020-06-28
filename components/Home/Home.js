@@ -1,41 +1,38 @@
 import React from 'react';
-import { Text, View, Image, StyleSheet } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
-import CurrencyInput from '../CurrencyInput';
-import Actions from '../../actions';
-import { SCREENS } from '../../constants';
-import AppLogo from '../AppLogo';
-import InputsContainer from '../InputsContainer';
-import useScreenTransform from '../../hooks/useScreenTransform';
+import styled from 'styled-components';
 
-import exchangeIcon from '../../assets/exchange.png';
+import Screen from 'components/Screen';
+import AppLogo from 'components/AppLogo';
+import CurrencyInput from 'components/CurrencyInput';
+import InputsContainer from 'components/InputsContainer';
+import { SCREENS } from 'constants';
+import useScreenTransform from 'hooks/useScreenTransform';
+import SwitchIcon from 'assets/transfer.svg';
+import selectors from 'selectors';
 import {
+  switchCurrencies,
   setBaseCurrencyValue,
-  setCalculatedCurrencyValue,
-} from '../../actions/currency.actions';
-import selectors from '../../selectors';
+  setTargetCurrencyValue,
+} from 'actions/currency.actions';
 
 function Home({ navigation }) {
   const theme = useSelector(selectors.getTheme);
   const baseCurrency = useSelector(selectors.getBaseCurrency);
-  const calculatedCurrency = useSelector(selectors.getCalculatedCurrency);
+  const targetCurrency = useSelector(selectors.getTargetCurrency);
   const baseCurrencyValue = useSelector(selectors.getBaseCurrencyValue);
   const exchangeRate = useSelector(selectors.getExchangeRate);
-  const calculatedCurrencyValue = useSelector(
-    selectors.getCalculatedCurrencyValue,
-  );
+  const targetCurrencyValue = useSelector(selectors.getTargetCurrencyValue);
   const dispatch = useDispatch();
 
   const { imageY, inputContainerY, imageScale } = useScreenTransform();
 
   return (
-    <View style={[styles.home, { backgroundColor: theme.color }]}>
-      <AppLogo scale={imageScale} translateY={imageY} />
-      <InputsContainer
-        style={styles.conversionContainer}
-        translateY={inputContainerY}>
-        <Text style={styles.title}>Currency Converter</Text>
+    <Screen backgroundColor={theme.color}>
+      <AppLogo scale={imageScale} translateY={imageY} showInfo />
+      <InputsContainer translateY={inputContainerY}>
+        <Title>Currency Converter</Title>
         <CurrencyInput
           code={baseCurrency}
           changeCurrency={(item) => {
@@ -48,35 +45,35 @@ function Home({ navigation }) {
           }}
           value={baseCurrencyValue}
         />
-        <View style={styles.rowFlex}>
-          <Text onPress={() => dispatch(Actions.switchCurrencies.pending())}>
-            <Image source={exchangeIcon} style={styles.exchangeIcon} />
-          </Text>
-          <Text style={styles.infoText}>Switch Currencies</Text>
-        </View>
+        <RowFlex justify="flex-start">
+          <SwitchIconContainer onPress={() => dispatch(switchCurrencies.pending())} >
+            <SwitchIcon height={40} width={30}  fill="#fff" />
+          </SwitchIconContainer>
+        </RowFlex>
 
         <CurrencyInput
-          code={calculatedCurrency}
+          code={targetCurrency}
           changeCurrency={(item) => {
             navigation.navigate(SCREENS.CURRENCIES, {
               title: 'Target Currency',
             });
           }}
           onChange={(value) => {
-            dispatch(setCalculatedCurrencyValue(value));
+            dispatch(setTargetCurrencyValue(value));
           }}
-          value={calculatedCurrencyValue}
+          value={targetCurrencyValue}
         />
-        <View
-          style={[styles.rowFlex, { justifyContent: 'center', marginTop: 15 }]}>
+        <RowFlex marginTop={15}>
           {exchangeRate && (
-            <Text style={styles.infoText}>{`1 ${baseCurrency} = ${Number(
-              exchangeRate,
-            ).toFixed(3)} ${calculatedCurrency} as of June 24`}</Text>
+            <InfoText>{`1 ${baseCurrency} = ${Number(exchangeRate).toFixed(
+              3,
+            )} ${targetCurrency} as of ${new Date()
+              .toDateString()
+              .slice(4, 10)}`}</InfoText>
           )}
-        </View>
+        </RowFlex>
       </InputsContainer>
-    </View>
+    </Screen>
   );
 }
 
@@ -86,31 +83,27 @@ Home.propTypes = {
 
 export default Home;
 
-const styles = StyleSheet.create({
-  home: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    padding: 10,
-    paddingTop: 30,
-  },
-  title: {
-    color: '#fff',
-    fontSize: 26,
-    textAlign: 'center',
-    marginBottom: 10,
-  },
-  exchangeIcon: {
-    marginLeft: -5,
-    transform: [{ scale: 0.7 }],
-  },
-  rowFlex: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  infoText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '500',
-  },
-});
+const Title = styled.Text`
+  color: #fff;
+  font-size: 26px;
+  text-align: center;
+  margin-bottom: 10px;
+`;
+
+const RowFlex = styled.View`
+  flex-direction: row;
+  align-items: center;
+  justify-content: ${(props) => props.justify || 'center'};
+  margin-top: ${(props) => `${props.marginTop || 0}px`};
+`;
+
+const InfoText = styled.Text`
+  color: #fff;
+  font-size: 16px;
+  font-weight: 500;
+`;
+const SwitchIconContainer = styled.TouchableOpacity`
+  width: 30px;
+  height: 40px;
+  padding-left: 10px;
+`;

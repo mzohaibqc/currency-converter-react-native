@@ -1,14 +1,22 @@
 import React from 'react';
-import { TouchableOpacity, Text, StyleSheet } from 'react-native';
+import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 
-function Option({ title, icon, action }) {
+import ListItem from 'components/ListItem';
+import ListItemTitle from 'components/ListItemTitle';
+import selectors from 'selectors';
+
+function Option({ title, icon, action, isLast }) {
+  const theme = useSelector(selectors.getTheme);
   return (
-    <TouchableOpacity style={styles.item} onPress={action}>
-      <Text style={styles.title}>{title}</Text>
-      <FontAwesomeIcon icon={icon} color="#fff" />
-    </TouchableOpacity>
+    <ListItem isLast={isLast}>
+      <ListItemTitle>{title}</ListItemTitle>
+      <IconCircle onPress={action}>
+        <FontAwesomeIcon icon={icon} color={theme.color} size={14} />
+      </IconCircle>
+    </ListItem>
   );
 }
 
@@ -20,19 +28,11 @@ Option.propTypes = {
 
 export default Option;
 
-const styles = StyleSheet.create({
-  item: {
-    display: 'flex',
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    padding: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-  },
-  title: {
-    fontSize: 16,
-    color: '#fff',
-    fontWeight: '500',
-  },
-});
+const IconCircle = styled.TouchableOpacity`
+   width: 26px;
+   height: 26px;
+   border-radius: 13px;
+   background-color: #fff;
+   align-items: center;
+   justify-content: center;
+`;

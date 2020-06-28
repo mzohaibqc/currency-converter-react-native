@@ -1,10 +1,11 @@
-import { THEMES_MAP, AUTH_STATES } from '../constants';
-import { SET_THEME, SET_AUTH_STATE, LOGIN, LOGOUT } from '../actions/app.actions';
+import { THEMES_MAP, AUTH_STATES } from 'constants';
+import { SET_THEME, SET_AUTH_STATE, LOGIN, LOGOUT, TOGGLE_FAVORITE } from 'actions/app.actions';
 
 const initialState = {
   theme: THEMES_MAP.Blue,
   authState: AUTH_STATES.LOADING,
   loginLoading: false,
+  favorites: {},
 };
 const currencyReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -44,6 +45,19 @@ const currencyReducer = (state = initialState, action) => {
       return {
         ...state,
         theme: action.value,
+      };
+    }
+    case TOGGLE_FAVORITE: {
+      const { value } = action;
+      const favorites = { ...state.favorites };
+      if (value.code in favorites) {
+        delete favorites[value.code];
+      } else {
+        favorites[value.code] = value;
+      }
+      return {
+        ...state,
+        favorites
       };
     }
 

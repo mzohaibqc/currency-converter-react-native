@@ -1,13 +1,13 @@
 export const getBaseCurrency = (state) => state.currencyReducer.baseCurrency;
-export const getCalculatedCurrency = (state) =>
-  state.currencyReducer.calculatedCurrency;
+export const getTargetCurrency = (state) =>
+  state.currencyReducer.targetCurrency;
 export const getBaseCurrencyValue = (state) =>
   state.currencyReducer.baseCurrencyValue;
-export const getCalculatedCurrencyValue = (state) =>
-  state.currencyReducer.calculatedCurrencyValue;
+export const getTargetCurrencyValue = (state) =>
+  state.currencyReducer.targetCurrencyValue;
 export const getExchangeRates = (state) => state.currencyReducer.rates;
 export const getExchangeRate = (state) => {
-  const calculatedCurrency = getCalculatedCurrency(state);
+  const targetCurrency = getTargetCurrency(state);
   const rates = getExchangeRates(state);
-  return rates[calculatedCurrency];
+  return rates[targetCurrency];
 };

@@ -1,8 +1,12 @@
 import React, { useState, useCallback } from 'react';
-import { View, Text, TextInput, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
+
+import {
+  InputContainer,
+  TextInput,
+  Icon,
+} from 'components/StyledComponents';
 
 function SearchBar({ onChange }) {
   const [search, setSearch] = useState('');
@@ -14,16 +18,16 @@ function SearchBar({ onChange }) {
     [onChange],
   );
   return (
-    <View style={styles.searchSection}>
-      <FontAwesomeIcon icon={faSearch} style={styles.searchIcon} />
+    <InputContainer marginBottom="0">
+      <Icon icon={faSearch} size={20} />
       <TextInput
-        style={styles.input}
         placeholder="Search..."
         onChangeText={onSearch}
         underlineColorAndroid="transparent"
         value={search}
+        fontSize={18}
       />
-    </View>
+    </InputContainer>
   );
 }
 
@@ -32,30 +36,3 @@ SearchBar.propTypes = {
 };
 
 export default SearchBar;
-
-const styles = StyleSheet.create({
-  searchSection: {
-    height: 50,
-    width: '100%',
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#fff',
-  },
-  searchIcon: {
-    padding: 10,
-    width: 30,
-    marginLeft: 10,
-    marginRight: 10,
-  },
-  input: {
-    flex: 1,
-    paddingTop: 10,
-    paddingRight: 10,
-    paddingBottom: 10,
-    paddingLeft: 0,
-    backgroundColor: '#fff',
-    color: '#424242',
-    height: 50,
-  },
-});

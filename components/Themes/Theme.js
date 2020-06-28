@@ -1,53 +1,36 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import { Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faCircle, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 
-import { setTheme } from '../../actions/app.actions';
-import selectors from '../../selectors';
+import ListItem from 'components/ListItem';
+import ListItemTitle from 'components/ListItemTitle';
+import selectors from 'selectors';
+import { setTheme } from 'actions/app.actions';
 
-function ThemeItem({ theme }) {
-  const { title, color } = theme;
+function ThemeItem({ theme, isLast }) {
+  const { name, color } = theme;
   const dispatch = useDispatch();
   const appliedTheme = useSelector(selectors.getTheme);
   return (
-    <TouchableOpacity
-      style={[styles.item]}
-      onPress={() => {
-        dispatch(setTheme(theme));
-      }}>
-      <Text style={styles.title}>{title}</Text>
+    <ListItem isLast={isLast}>
+      <ListItemTitle color={color}>{name}</ListItemTitle>
       <FontAwesomeIcon
         icon={color === appliedTheme.color ? faCheckCircle : faCircle}
         style={{ color }}
         size={22}
+        onPress={() => {
+          dispatch(setTheme(theme));
+        }}
       />
-    </TouchableOpacity>
+    </ListItem>
   );
 }
 
 ThemeItem.propTypes = {
   theme: PropTypes.object,
+  isLast: PropTypes.bool,
 };
 
 export default ThemeItem;
-
-const styles = StyleSheet.create({
-  item: {
-    display: 'flex',
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    borderBottomWidth: 1,
-    height: 50,
-    paddingLeft: 10,
-    paddingRight: 10,
-    borderBottomColor: '#eee',
-  },
-  title: {
-    fontSize: 14,
-  },
-});

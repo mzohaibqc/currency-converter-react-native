@@ -3,58 +3,32 @@
  */
 import 'react-native-gesture-handler';
 import React, { useEffect, useCallback, useState } from 'react';
-import { StyleSheet } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
-import AsyncStorage from '@react-native-community/async-storage';
 import { Provider, useSelector, useDispatch } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faCog } from '@fortawesome/free-solid-svg-icons';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
 
-import Login from './Login';
-import Home from './Home';
-import Options from './Options';
-import Themes from './Themes';
-import CurrencyList from './CurrencyList';
-import SplashScreen from './SplashScreen';
-import { SCREENS, AUTH_STATES, THEMES, THEMES_MAP } from '../constants';
-import { getExchangeRates } from '../api';
-import { setExchangeRates } from '../actions/currency.actions';
-import { setAuthState, setTheme } from '../actions/app.actions';
-
-import store from '../store';
-import selectors from '../selectors';
+import Login from 'components/Login';
+import Home from 'components/Home';
+import Options from 'components/Options';
+import Themes from 'components/Themes';
+import CurrencyList from 'components/CurrencyList';
+import Favorites from 'components/Favorites';
+import SplashScreen from 'components/SplashScreen';
+import { HeaderMenuIcon } from 'components/StyledComponents'
+import { SCREENS, AUTH_STATES } from 'constants';
+import { getExchangeRates } from 'api';
+import { setExchangeRates } from 'actions/currency.actions';
+import { initializeAppState } from 'actions/app.actions';
+import store from 'store';
+import selectors from 'selectors';
 
 const Stack = createStackNavigator();
 
 function App() {
-  const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
   const theme = useSelector(selectors.getTheme);
   const authState = useSelector(selectors.getAuthState);
-
-  const initialzeAuthState = useCallback(async () => {
-    if (!loading) setLoading(true);
-    let authState = '';
-    let appTheme = THEMES_MAP.Blue;
-    try {
-      authState = await AsyncStorage.getItem('authState');
-    } catch (error) {
-      authState = AUTH_STATES.LOGGED_OUT;
-    }
-    try {
-      appTheme = await AsyncStorage.getItem('appTheme');
-      appTheme = JSON.parse(appTheme);
-    } catch (error) {
-      appTheme = THEMES_MAP.Blue;
-    }
-    
-    setTimeout(() => {
-      dispatch(setAuthState(authState || AUTH_STATES.LOGGED_OUT));
-      dispatch(setTheme(appTheme || THEMES_MAP.Blue));
-      setLoading(false);
-    }, 1000);
-  });
 
   const initializeExchangeRates = useCallback(async () => {
     const data = await getExchangeRates('USD');
@@ -63,9 +37,7 @@ function App() {
 
   useEffect(() => {
     initializeExchangeRates();
-  }, []);
-  useEffect(() => {
-    initialzeAuthState();
+    dispatch(initializeAppState());
   }, []);
 
   const navigationTheme = {
@@ -110,9 +82,8 @@ function App() {
               options={({ navigation }) => ({
                 ...headerOptions,
                 headerRight: () => (
-                  <FontAwesomeIcon
-                    style={styles.optionsIcon}
-                    icon={faCog}
+                  <HeaderMenuIcon
+                    icon={faBars}
                     size={20}
                     onPress={() => {
                       navigation.navigate(SCREENS.OPTIONS);
@@ -134,34 +105,31 @@ function App() {
             <Stack.Screen
               name={SCREENS.CURRENCIES}
               options={({ route }) => ({
-                ...headerOptions,
+                ...themesHeaderOptions,
                 title: route.params.title,
               })}>
               {(props) => <CurrencyList {...props} />}
             </Stack.Screen>
+            <Stack.Screen
+              name={SCREENS.FAVORITES}
+              component={Favorites}
+              options={headerOptions}
+            />
           </>
         )}
 
         {authState === AUTH_STATES.LOGGED_OUT && (
-          <>
-            <Stack.Screen
-              name={SCREENS.LOGIN}
-              component={Login}
-              options={({ navigation }) => ({ ...headerOptions })}
-            />
-          </>
+          <Stack.Screen
+            name={SCREENS.LOGIN}
+            component={Login}
+            options={({ navigation }) => ({ ...headerOptions })}
+          />
         )}
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
 
-const styles = StyleSheet.create({
-  optionsIcon: {
-    marginRight: 10,
-    color: '#fff',
-  },
-});
 
 export default () => (
   <Provider store={store}>

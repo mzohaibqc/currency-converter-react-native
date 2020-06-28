@@ -1,29 +1,15 @@
 import React from 'react';
-import {
-  StyleSheet,
-  Animated,
-} from 'react-native';
 
-import logo from '../assets/currency-logo.png';
+import SvgLogo from 'components/SvgLogo';
+import { AppLogoContainer } from 'components/StyledComponents';
 
-export default function AppLogo({ scale, translateY }) {
+function AppLogo({ scale, translateY, showInfo = false }) {
   return (
-    <Animated.View
-      style={[
-        styles.logoContainer,
-        { transform: [{ scale }, { translateY }] },
-      ]}>
-      <Animated.Image source={logo} style={styles.image} />
-    </Animated.View>
+    <AppLogoContainer
+      style={{ transform: [{ scale }, { translateY }] }}>
+      <SvgLogo fill="#fff" showInfo={showInfo} />
+    </AppLogoContainer>
   );
 }
-const styles = StyleSheet.create({
-  logoContainer: {
-    width: 250,
-    height: 250,
-  },
-  image: {
-    width: 'auto',
-    height: '100%',
-  },
-});
+
+export default AppLogo;

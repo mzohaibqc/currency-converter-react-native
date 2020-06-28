@@ -2,17 +2,17 @@
 import {
   SET_BASE_CURRENCY,
   SWITCH_CURRENCIES,
-  SET_CALCULATED_CURRENCY,
+  SET_TARGET_CURRENCY,
   SET_EXCHNAGE_RATES,
   SET_BASE_CURRENCY_VALUE,
-  SET_CALCULATED_CURRENCY_VALUE,
+  SET_TARGET_CURRENCY_VALUE,
 } from '../actions/currency.actions';
 
 const initialState = {
   baseCurrency: 'USD',
-  calculatedCurrency: 'AUD',
+  targetCurrency: 'AUD',
   baseCurrencyValue: 0,
-  calculatedCurrencyValue: 0,
+  targetCurrencyValue: 0,
   rates: {},
 };
 const currencyReducer = (state = initialState, action) => {
@@ -23,10 +23,10 @@ const currencyReducer = (state = initialState, action) => {
         baseCurrency: action.value,
       };
     }
-    case SET_CALCULATED_CURRENCY: {
+    case SET_TARGET_CURRENCY: {
       return {
         ...state,
-        calculatedCurrency: action.value,
+        targetCurrency: action.value,
       };
     }
     case SWITCH_CURRENCIES.PENDING: {
@@ -38,17 +38,17 @@ const currencyReducer = (state = initialState, action) => {
     case SWITCH_CURRENCIES.SUCCESS: {
       const {
         baseCurrency,
-        calculatedCurrency,
+        targetCurrency,
         baseCurrencyValue,
-        calculatedCurrencyValue,
+        targetCurrencyValue,
       } = state;
       return {
         ...state,
         loading: false,
-        baseCurrency: calculatedCurrency,
-        calculatedCurrency: baseCurrency,
-        baseCurrencyValue: calculatedCurrencyValue,
-        calculatedCurrencyValue: baseCurrencyValue,
+        baseCurrency: targetCurrency,
+        targetCurrency: baseCurrency,
+        baseCurrencyValue: targetCurrencyValue,
+        targetCurrencyValue: baseCurrencyValue,
       };
     }
 
@@ -70,18 +70,18 @@ const currencyReducer = (state = initialState, action) => {
       return {
         ...state,
         baseCurrencyValue: action.value,
-        calculatedCurrencyValue: (
-          Number(action.value || 0) * state.rates[state.calculatedCurrency]
+        targetCurrencyValue: (
+          Number(action.value || 0) * state.rates[state.targetCurrency]
         ).toFixed(3),
       };
     }
-    case SET_CALCULATED_CURRENCY_VALUE: {
+    case SET_TARGET_CURRENCY_VALUE: {
       return {
         ...state,
-        calculatedCurrencyValue: action.value,
+        targetCurrencyValue: action.value,
         baseCurrencyValue: (
           Number(action.value || 0) *
-          (1 / state.rates[state.calculatedCurrency])
+          (1 / state.rates[state.targetCurrency])
         ).toFixed(3),
       };
     }

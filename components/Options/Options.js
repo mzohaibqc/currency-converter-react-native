@@ -1,18 +1,22 @@
 import React, { useCallback } from 'react';
-import { useDispatch } from 'react-redux';
-import { View, Alert, Linking, FlatList, StyleSheet } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { Alert, Linking } from 'react-native';
 import PropTypes from 'prop-types';
 import {
   faAngleRight,
   faLink,
   faSignOutAlt,
 } from '@fortawesome/free-solid-svg-icons';
-import Option from './Option';
-import { SCREENS } from '../../constants';
-import { logout } from '../../actions/app.actions';
+import Option from 'components/Options/Option';
+import Screen from 'components/Screen';
+import selectors from 'selectors';
+import { SCREENS } from 'constants';
+import { logout } from 'actions/app.actions';
+
 
 function Options({ navigation }) {
   const dispatch = useDispatch();
+  const theme = useSelector(selectors.getTheme);
   const openLink = useCallback(async (url) => {
     const supported = await Linking.canOpenURL(url);
 
@@ -31,6 +35,13 @@ function Options({ navigation }) {
       },
     },
     {
+      title: 'Favorite Currencies',
+      icon: faAngleRight,
+      action: () => {
+        navigation.navigate(SCREENS.FAVORITES);
+      },
+    },
+    {
       title: 'ExchangeRatesApi.io',
       icon: faLink,
       action: () => {
@@ -46,15 +57,11 @@ function Options({ navigation }) {
     },
   ];
   return (
-    <View style={styles.options}>
-      <View style={styles.content}>
-        <FlatList
-          data={pages}
-          renderItem={({ item }) => <Option {...item} />}
-          keyExtractor={(item) => item.title}
-        />
-      </View>
-    </View>
+    <Screen backgroundColor={theme.color}>
+      {pages.map((item,  index) => (
+          <Option {...item} isLast={index === pages.length - 1} key={item.title} />
+      ))}
+    </Screen>
   );
 }
 
@@ -63,15 +70,3 @@ Options.propTypes = {
 };
 
 export default Options;
-
-const styles = StyleSheet.create({
-  options: { flex: 1, alignItems: 'center', justifyContent: 'center' },
-  header: {
-    height: 20,
-    // marginTop: 40,
-    alignSelf: 'flex-end',
-  },
-  content: {
-    flex: 1,
-  },
-});

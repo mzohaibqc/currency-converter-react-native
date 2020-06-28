@@ -3,10 +3,10 @@ export const SET_BASE_CURRENCY = 'SET_BASE_CURRENCY';
 
 export const setBaseCurrency = (value) => ({ type: SET_BASE_CURRENCY, value });
 
-export const SET_CALCULATED_CURRENCY = 'SET_CALCULATED_CURRENCY';
+export const SET_TARGET_CURRENCY = 'SET_TARGET_CURRENCY';
 
-export const setCalculatedCurrency = (value) => ({
-  type: SET_CALCULATED_CURRENCY,
+export const setTargetCurrency = (value) => ({
+  type: SET_TARGET_CURRENCY,
   value,
 });
 
@@ -32,9 +32,9 @@ export const setBaseCurrencyValue = (value) => ({
   value,
 });
 
-export const SET_CALCULATED_CURRENCY_VALUE = 'SET_CALCULATED_CURRENCY_VALUE';
+export const SET_TARGET_CURRENCY_VALUE = 'SET_TARGET_CURRENCY_VALUE';
 
-export const setCalculatedCurrencyValue = (value) => ({
-  type: SET_CALCULATED_CURRENCY_VALUE,
+export const setTargetCurrencyValue = (value) => ({
+  type: SET_TARGET_CURRENCY_VALUE,
   value,
 });

@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "api/*": ["./api/*"],
+      "components/*": ["./components/*"],
+      "sagas/*": ["./sagas/*"],
+      "reducers/*": ["./reducers/*"],
+      "actions/*": ["./actions/*"],
+      "assets/*": ["./assets/*"],
+      "store/*": ["./store/*"],
+      "constants/*": ["./constants/*"],
+      "hooks/*": ["./hooks/*"]
+    }
+  }
+}

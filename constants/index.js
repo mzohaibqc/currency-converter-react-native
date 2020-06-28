@@ -1,4 +1,5 @@
 import allCurrencies from './currencies';
+import themes from './themes';
 
 export const AUTH_STATES = {
   LOADING: 'oading',
@@ -56,37 +57,20 @@ export const SCREENS = {
   THEMES: 'Themes',
   OPTIONS: 'Options',
   CURRENCIES: 'Base Currency',
-  SPLASH: 'Splash'
+  FAVORITES: 'Favorite Currencies',
+  SPLASH: 'Splash',
 };
 
-export const THEMES = [
-  {
-    title: 'Blue',
-    color: '#49a9ee',
-    darkShade: '#108ee9',
-    lightShade: '#7ec2f3',
-  },
-  {
-    title: 'Orange',
-    color: '#f78e3d',
-    darkShade: '#f56a00',
-    lightShade: '#faaf76',
-  },
-  {
-    title: 'Green',
-    color: '#3dbd7d',
-    darkShade: '#00a854',
-    lightShade: '#76d0a3',
-  },
-  {
-    title: 'Purple',
-    color: '#948aec',
-    darkShade: '#7265e6',
-    lightShade: '#b3acf2',
-  },
-];
-
+export const PRIMARY_INDEX = 4;
+export const THEMES = themes.map(theme => {
+  return {
+    ...theme,
+    get color () {
+      return theme.shades[PRIMARY_INDEX];
+    }
+  }
+})
 export const THEMES_MAP = THEMES.reduce((prev, item) => {
-  prev[item.title] = item;
+  prev[item.name] = item;
   return prev;
 }, {});

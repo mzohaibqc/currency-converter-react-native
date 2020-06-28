@@ -1,27 +1,26 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-  TouchableOpacity,
-  Text,
-  View,
-  FlatList,
-  StyleSheet,
-} from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
-import PropTypes from 'prop-types';
-import SearchBar from '../SearchBar';
-import { CURRENCIES } from '../../constants';
 import {
-  setBaseCurrency,
-  setCalculatedCurrency,
-  setBaseCurrencyValue,
-  setCalculatedCurrencyValue,
-} from '../../actions/currency.actions';
-import selectors from '../../selectors';
+  faCheckCircle,
+  faStar,
+  faCircle,
+} from '@fortawesome/free-solid-svg-icons';
+import PropTypes from 'prop-types';
+
+import SearchBar from 'components/SearchBar';
+import Screen from 'components/Screen';
+import ListItem from 'components/ListItem';
+import ListItemTitle from 'components/ListItemTitle';
+import { FlatList, Icon, FavoriteContainer } from 'components/StyledComponents';
+import { CURRENCIES, THEMES_MAP } from 'constants';
+import { setBaseCurrency, setTargetCurrency } from 'actions/currency.actions';
+import { toggleFavorite } from 'actions/app.actions';
+import selectors from 'selectors';
+
 
 function CurrencyList({
-  navigation,
   route: {
     params: { title },
   },
@@ -40,78 +39,67 @@ function CurrencyList({
   );
 
   const baseCurrency = useSelector(selectors.getBaseCurrency);
-  const targetCurrency = useSelector(selectors.getCalculatedCurrency);
+  const targetCurrency = useSelector(selectors.getTargetCurrency);
   const theme = useSelector(selectors.getTheme);
+  const favorites = useSelector(selectors.getFavorites);
   const currency = title === 'Base Currency' ? baseCurrency : targetCurrency;
   const setCurrency =
-    title === 'Base Currency' ? setBaseCurrency : setCalculatedCurrency;
+    title === 'Base Currency' ? setBaseCurrency : setTargetCurrency;
   const dispatch = useDispatch();
 
+  const setFavorite = useCallback((item) => {
+    dispatch(toggleFavorite(item));
+  }, []);
+
   return (
-    <View style={styles.options}>
+    <Screen paddingTop="0">
       <SearchBar onChange={filterData} />
-      <View style={styles.content}>
-        <FlatList
-          data={data}
-          renderItem={({ item }) => (
+      <FlatList
+        data={data}
+        renderItem={({ item, index }) => (
+          <ListItem isLast={index === data.length - 1} key={item.code}>
+            <FavoriteContainer>
+              <TouchableOpacity
+                underlayColor="#f9f9f9"
+                onPress={() => setFavorite(item)}>
+                <Icon
+                  icon={faStar}
+                  color={favorites[item.code] ? THEMES_MAP.Gold.color : '#ccc'}
+                  size={22}
+                  style={{ marginLeft: -2, marginRight: 15 }}
+                />
+              </TouchableOpacity>
+              <ListItemTitle color="#000">
+                {item.code} ({item.symbol_native})
+              </ListItemTitle>
+            </FavoriteContainer>
             <TouchableOpacity
-              style={styles.item}
+              underlayColor="#f9f9f9"
               onPress={() => {
                 dispatch(setCurrency(item.code));
               }}>
-              <Text style={styles.itemText} style={styles.title}>
-                {item.code} ({item.symbol_native})
-              </Text>
-              <View>
-                <Text style={styles.itemText} style={styles.title}>
-                  {currency === item.code && (
-                    <FontAwesomeIcon
-                      icon={faCheckCircle}
-                      size={22}
-                      style={[styles.checkIcon, { color: theme.color }]}
-                    />
-                  )}
-                </Text>
-              </View>
+              <FontAwesomeIcon
+                icon={currency === item.code ? faCheckCircle : faCircle}
+                color={currency === item.code ? theme.color : '#ccc'}
+                size={22}
+              />
             </TouchableOpacity>
-          )}
-          keyExtractor={(item) => item.code}
-        />
-      </View>
-    </View>
+          </ListItem>
+        )}
+        keyExtractor={(item) => item.code}
+      />
+    </Screen>
   );
 }
 
-CurrencyList.propTypes = {};
+CurrencyList.propTypes = {
+  route: PropTypes.shape({
+    params: PropTypes.shape({
+      title: PropTypes.string.isRequired,
+    }),
+  }),
+};
 
 export default CurrencyList;
 
-const styles = StyleSheet.create({
-  options: { flex: 1, alignItems: 'center', justifyContent: 'center' },
-  content: {
-    flex: 1,
-  },
-  header: {
-    height: 20,
-    marginTop: 40,
-    alignSelf: 'flex-end',
-  },
-  item: {
-    display: 'flex',
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-    height: 50,
-    paddingLeft: 10,
-    paddingRight: 10,
-  },
-  itemText: {
-    fontSize: 24,
-  },
-  checkIcon: {
-    // marginLeft: 10,
-  },
-});
+

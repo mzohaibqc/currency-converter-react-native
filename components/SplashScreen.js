@@ -1,29 +1,15 @@
 import React from 'react';
-import { StyleSheet, View, Image } from 'react-native';
-import logo from '../assets/currency-logo.png';
+
+import SvgLogo from './SvgLogo';
+import Screen from './Screen';
+import { THEMES_MAP } from 'constants/';
 
 function SplashScreen() {
   return (
-    <View style={styles.main}>
-      <Image source={logo} style={styles.image} />
-    </View>
+    <Screen justify="center" paddingTop="0">
+      <SvgLogo width={250} height={250} fill={THEMES_MAP.Magenta.color} />
+    </Screen>
   )
 }
 
 export default SplashScreen;
-
-const styles = StyleSheet.create({
-  main: {
-    flex: 1,
-    alignItems: 'center',
-    alignContent: 'center',
-    justifyContent: 'center',
-    padding: 10,
-    marginTop: '-30%',
-    backgroundColor: "#fff",
-  },
-  image: {
-    width: 300,
-    height: 300,
-  }
-})
