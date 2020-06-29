@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 
 import Screen from 'components/Screen';
 import AppLogo from 'components/AppLogo';
@@ -32,7 +32,7 @@ function Home({ navigation }) {
     <Screen backgroundColor={theme.color}>
       <AppLogo scale={imageScale} translateY={imageY} showInfo />
       <InputsContainer translateY={inputContainerY}>
-        <Title>Currency Converter</Title>
+        <Title testID="main-title">Currency Converter</Title>
         <CurrencyInput
           code={baseCurrency}
           changeCurrency={(item) => {

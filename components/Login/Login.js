@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { faUser, faLock, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faLock } from '@fortawesome/free-solid-svg-icons';
 
 import Screen from 'components/Screen';
 import AppLogo from 'components/AppLogo';
