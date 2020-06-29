@@ -85,7 +85,7 @@ function SvgLogo({ fill, width, height, showInfo, style }) {
                 fontWeight="bold"
                 textAnchor="middle"
                 transform={inverted ? 'rotate(180, 120, 135)' : 'rotate(0)'}>
-                {baseCurrency}
+                {inverted ? targetCurrency : baseCurrency}
               </Text>
             )}
           </G>
@@ -110,7 +110,7 @@ function SvgLogo({ fill, width, height, showInfo, style }) {
                 fontSize="30"
                 fontWeight="bold"
                 transform={inverted ? 'rotate(180, 375, 379)' : 'rotate(0)'}>
-                {targetCurrency}
+                {inverted ? baseCurrency : targetCurrency}
               </Text>
             )}
           </G>

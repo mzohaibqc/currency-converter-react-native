@@ -9,7 +9,6 @@ import {
   setAuthState,
   LOGIN,
   LOGOUT,
-  SET_THEME,
   INITIALIZE_APP_STATE,
 } from '../actions/app.actions';
 import { AUTH_STATES, THEMES_MAP, PRIMARY_INDEX } from '../constants';
@@ -42,38 +41,8 @@ function* watchLogout() {
     yield put(logout.error());
   }
 }
-// TODO: Need to remove this in redux-persist will perform well without issues
-function* watchInitializeAppState() {
-  try {
-    let appTheme = THEMES_MAP.Blue;
-    try {
-      authState = yield call(AsyncStorage.getItem, 'authState');
-    } catch (error) {
-      authState = AUTH_STATES.LOGGED_OUT;
-    }
-    try {
-      appTheme = yield call(AsyncStorage.getItem, 'appTheme');
-      appTheme = JSON.parse(appTheme);
-    } catch (error) {
-      appTheme = THEMES_MAP.Blue;
-    }
-    yield call(sleep, 500);
-    yield put(setAuthState(authState || AUTH_STATES.LOGGED_OUT));
-    let selectedTheme = appTheme || THEMES_MAP.Blue;
-    selectedTheme = {
-      ...selectedTheme,
-      get color() {
-        return selectedTheme.shades[PRIMARY_INDEX];
-      },
-    };
-    yield put(setTheme(selectedTheme));
-  } catch (e) {
-    console.log('Error', e);
-  }
-}
 
 export default [
   takeLatest(LOGIN.PENDING, watchLogin),
   takeLatest(LOGOUT.PENDING, watchLogout),
-  takeLatest(INITIALIZE_APP_STATE, watchInitializeAppState),
 ];

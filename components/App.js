@@ -3,7 +3,7 @@
  */
 import 'react-native-gesture-handler';
 import React, { useEffect, useCallback } from 'react';
-import { Platform } from 'react-native';
+import { Keyboard } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { Provider, useSelector, useDispatch } from 'react-redux';
@@ -82,6 +82,7 @@ function App() {
                     underlayColor="#fff"
                     onPress={() => {
                       navigation.navigate(SCREENS.OPTIONS);
+                      Keyboard.dismiss();
                     }}>
                     <HeaderMenuIcon icon={faBars} size={20} />
                   </HeaderIconContainer>
@@ -129,7 +130,6 @@ function App() {
 export default () => (
   <Provider store={store}>
     <PersistGate loading={<SplashScreen />} persistor={persistor}>
-      {/* {Platform.OS === 'ios' && <StatusBar barStyle="light-content" />} */}
       <App />
     </PersistGate>
   </Provider>
